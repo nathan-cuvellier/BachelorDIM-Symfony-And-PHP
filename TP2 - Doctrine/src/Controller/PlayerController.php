@@ -36,7 +36,7 @@ class PlayerController extends AbstractController
         $player = new Player();
 
         if ($request->getMethod() == Request::METHOD_POST) {
-            $player = (new Player())
+            $player
                 ->setEmail($request->get('email'))
                 ->setUsername($request->get('username'));
 
