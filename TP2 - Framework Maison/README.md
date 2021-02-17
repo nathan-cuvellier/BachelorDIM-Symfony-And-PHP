@@ -1,5 +1,6 @@
 ![php badge](https://img.shields.io/badge/php-%3E%3D%208.0-8892BF.svg)
-# TP2 - Part 2
+
+# TP2 - Part 1
 
 ## Requirements
 
@@ -7,9 +8,7 @@
 - SQLite
 - Composer
 
-## Getting started
-
-clone the project and run: 
+clone the project and run:
 ```shell
 composer install
 ```
