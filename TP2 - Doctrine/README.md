@@ -13,3 +13,18 @@ clone the project and run:
 ```shell
 composer install
 ```
+# Home page
+
+## TP2 - Doctrine
+
+### Home page
+![todo list](https://github.com/nathan-cuvellier/BachelorDIM-Symfony-And-PHP/blob/master/img/TP2_2_homepage.png?raw=true)
+
+### Games page
+![todo list](https://github.com/nathan-cuvellier/BachelorDIM-Symfony-And-PHP/blob/master/img/TP2_2_game.png?raw=true)
+
+### Players page
+![todo list](https://github.com/nathan-cuvellier/BachelorDIM-Symfony-And-PHP/blob/master/img/TP2_2_player.png?raw=true)
+
+### Scores page
+![todo list](https://github.com/nathan-cuvellier/BachelorDIM-Symfony-And-PHP/blob/master/img/TP2_2_score.png?raw=true)
