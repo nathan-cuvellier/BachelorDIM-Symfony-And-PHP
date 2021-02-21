@@ -51,11 +51,7 @@ class Game
         return $this->name;
     }
 
-    /**
-     * @param string|null $name
-     * @return Game
-     */
-    public function setName(?string $name): Game
+    public function setName(?string $name): self
     {
         $this->name = $name;
         return $this;
@@ -69,11 +65,7 @@ class Game
         return $this->image;
     }
 
-    /**
-     * @param string|null $image
-     * @return Game
-     */
-    public function setImage(?string $image): Game
+    public function setImage(?string $image): self
     {
         $this->image = $image;
         return $this;
@@ -87,11 +79,7 @@ class Game
         return $this->owned;
     }
 
-    /**
-     * @param Player|null $owned
-     * @return Game
-     */
-    public function setOwned(?Player $owned): Game
+    public function setOwned(?Player $owned): self
     {
         $this->owned = $owned;
         return $this;

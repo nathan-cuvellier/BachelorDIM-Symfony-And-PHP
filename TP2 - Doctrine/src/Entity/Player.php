@@ -45,11 +45,7 @@ class Player
         return $this->username;
     }
 
-    /**
-     * @param string|null $username
-     * @return Player
-     */
-    public function setUsername(?string $username): Player
+    public function setUsername(?string $username): self
     {
         $this->username = $username;
         return $this;
@@ -63,11 +59,7 @@ class Player
         return $this->email;
     }
 
-    /**
-     * @param string|null $email
-     * @return Player
-     */
-    public function setEmail(?string $email): Player
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
         return $this;

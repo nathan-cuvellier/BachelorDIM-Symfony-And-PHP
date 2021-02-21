@@ -4,6 +4,7 @@ namespace App\Controller;
 
 
 use App\Entity\Game;
+use App\Entity\Player;
 use App\FakeData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,26 +13,32 @@ use Symfony\Component\HttpFoundation\Response;
 class GameController extends AbstractController
 {
 
-    public function index(Request $request): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        /**
-         * @todo lister les jeux de la base
-         */
-        $games = FakeData::games(15);
+        $games = $entityManager
+            ->getRepository(Game::class)
+            ->findAll();
         return $this->render("game/index", ["games" => $games]);
 
     }
 
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $em = $entityManager->getRepository(Game::class);
-        $game = FakeData::games(1)[0];
+
+        //$game = FakeData::games(1)[0];
+        $game = (new Game())
+            ->setName('GAME 1')
+            ->setImage('https://fakeimg.pl/256x256/b0aae1/615b39/?text=GAME+1');
 
         if ($request->getMethod() == Request::METHOD_POST) {
-            $game = new Game();
+
             $game
                 ->setName($request->get('name'))
                 ->setImage($request->get('image'));
+
+            $entityManager->persist($game);
+            $entityManager->flush();
+
 
             return $this->redirectTo("/game");
         }
@@ -39,21 +46,27 @@ class GameController extends AbstractController
     }
 
 
-    public function show(int $id): Response
+    public function show(int $id, EntityManagerInterface $entityManager): Response
     {
-        $game = FakeData::games(1)[0];
+        $game = $entityManager->getRepository(Game::class)->find($id);
+
         return $this->render("game/show", ["game" => $game]);
     }
 
 
-    public function edit(int $id, Request $request): Response
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $game = FakeData::games(1)[0];
+        $game = $entityManager->getRepository(Game::class)->find($id);
+        $owner = $entityManager->getRepository(Player::class)->find(5);
 
         if ($request->getMethod() == Request::METHOD_POST) {
-            /**
-             * @todo enregistrer l'objet
-             */
+            $game
+                ->setName($request->get('name'))
+                ->setImage($request->get('image'))
+                ->setOwned($owner);
+
+            $entityManager->persist($game);
+            $entityManager->flush();
             return $this->redirectTo("/game");
         }
         return $this->render("game/form", ["game" => $game]);
@@ -63,9 +76,9 @@ class GameController extends AbstractController
 
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
-        $em = $entityManager->getRepository(Game::class);
-        $game = $em->find($id);
+        $game = $entityManager->getRepository(Game::class)->find($id);
         $entityManager->remove($game);
+        $entityManager->flush();
         return $this->redirectTo("/game");
 
     }

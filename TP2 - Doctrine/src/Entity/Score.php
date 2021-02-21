@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,19 +25,19 @@ class Score
     private ?float $score;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private ?string $image;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Player", inversedBy="score")
      */
     private ?Player $player;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Player", inversedBy="score")
+     * @ORM\ManyToOne(targetEntity="Game", inversedBy="score")
      */
     private ?Game $game;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?DateTime $created_at;
 
     /**
      * @return int
@@ -54,31 +55,9 @@ class Score
         return $this->score;
     }
 
-    /**
-     * @param string|null $score
-     * @return Score
-     */
-    public function setScore(?string $score): Score
+    public function setScore(?string $score): self
     {
         $this->score = $score;
-        return $this;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    /**
-     * @param string|null $image
-     * @return Score
-     */
-    public function setImage(?string $image): Score
-    {
-        $this->image = $image;
         return $this;
     }
 
@@ -90,11 +69,7 @@ class Score
         return $this->player;
     }
 
-    /**
-     * @param Player|null $player
-     * @return Score
-     */
-    public function setPlayer(?Player $player): Score
+    public function setPlayer(?Player $player): self
     {
         $this->player = $player;
         return $this;
@@ -108,16 +83,24 @@ class Score
         return $this->game;
     }
 
-    /**
-     * @param Game|null $game
-     * @return Score
-     */
-    public function setGame(?Game $game): Score
+    public function setGame(?Game $game): self
     {
         $this->game = $game;
         return $this;
     }
 
+    /**
+     * @return DateTime|null
+     */
+    public function getCreatedAt(): ?DateTime
+    {
+        return $this->created_at;
+    }
 
+    public function setCreatedAt(?DateTime $created_at): self
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
 
 }
