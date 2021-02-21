@@ -85,6 +85,12 @@ class Game
         return $this;
     }
 
-
+    /**
+     * @return Score|null
+     */
+    public function getScore(): ?Score
+    {
+        return $this->score;
+    }
 
 }
