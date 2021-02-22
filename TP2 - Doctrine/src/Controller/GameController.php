@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Entity\Player;
+use App\Repository\GameRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,20 +16,15 @@ class GameController extends AbstractController
 {
 
     #[Route('', name:'index')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(GameRepository $game): Response
     {
-        $games = $entityManager
-            ->getRepository(Game::class)
-            ->findAll();
-        return $this->render("game/index.html.twig", ["games" => $games]);
+        return $this->render("game/index.html.twig", ["games" => $game->findAll()]);
 
     }
 
     #[Route('/add', name:'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-
-        //$game = FakeData::games(1)[0];
         $game = (new Game())
             ->setName('GAME 1')
             ->setImage('https://fakeimg.pl/256x256/b0aae1/615b39/?text=GAME+1');
@@ -49,20 +45,17 @@ class GameController extends AbstractController
     }
 
 
-    #[Route('/show/{id}', name:'show')]
-    public function show(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/show/{game}', name:'show')]
+    public function show(Game $game, Request $test): Response
     {
-        $game = $entityManager->getRepository(Game::class)->find($id);
-
         return $this->render("game/show.html.twig", ["game" => $game]);
     }
 
 
-    #[Route('/edit/{id}', name:'edit')]
-    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/edit/{game}', name:'edit')]
+    public function edit(Game $game, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $game = $entityManager->getRepository(Game::class)->find($id);
-        $owner = $entityManager->getRepository(Player::class)->find(5);
+        $owner = $entityManager->getRepository(Player::class)->findAll()[0];
 
         if ($request->getMethod() == Request::METHOD_POST) {
             $game
@@ -79,10 +72,9 @@ class GameController extends AbstractController
 
     }
 
-    #[Route('/delete/{id}', name:'delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/delete/{game}', name:'delete')]
+    public function delete(Game $game, EntityManagerInterface $entityManager): Response
     {
-        $game = $entityManager->getRepository(Game::class)->find($id);
         $entityManager->remove($game);
         $entityManager->flush();
         return $this->redirectTo("/game");

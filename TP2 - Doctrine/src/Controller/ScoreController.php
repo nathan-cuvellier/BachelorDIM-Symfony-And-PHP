@@ -55,10 +55,9 @@ class ScoreController extends AbstractController
         }
     }
 
-    #[Route('/delete', name:'delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager) : Response
+    #[Route('/delete/{score}', name:'delete')]
+    public function delete(Score $score, EntityManagerInterface $entityManager) : Response
     {
-        $score = $entityManager->getRepository(Score::class)->find($id);
         $entityManager->remove($score);
         $entityManager->flush();
         return $this->redirectTo("/score");

@@ -19,22 +19,15 @@ class PlayerController extends AbstractController
 
 
     #[Route('', name:'index')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(PlayerRepository $playerRepository): Response
     {
-        $players = $entityManager
-            ->getRepository(Player::class)
-            ->findAll();
-
-        //$players = FakeData::players(25);
-
-        return $this->render("player/index.html.twig", ["players" => $players]);
+        return $this->render("player/index.html.twig", ["players" => $playerRepository->findAll()]);
 
     }
 
     #[Route('/add', name:'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        //$player = FakeData::players(1)[0];
         $player = new Player();
 
         if ($request->getMethod() == Request::METHOD_POST) {
@@ -51,22 +44,16 @@ class PlayerController extends AbstractController
     }
 
 
-    #[Route('/show/{id}', name:'show')]
-    public function show(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/show/{player}', name:'show')]
+    public function show(Player $player): Response
     {
-        $player = $entityManager->getRepository(Player::class)
-            ->find($id);
-
-        return $this->render("player/show.html.twig", ["player" => $player, "availableGames" => FakeData::games()]);
+        return $this->render("player/show.html.twig", ["player" => $player]);
     }
 
 
-    #[Route('/edit/{id}', name:'edit')]
-    public function edit($id, Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/edit/{player}', name:'edit')]
+    public function edit(Player $player, Request $request, EntityManagerInterface $entityManager): Response
     {
-        $player = $entityManager->getRepository(Player::class)
-            ->find($id);
-
         if ($request->getMethod() == Request::METHOD_POST) {
             $player
                 ->setUsername($request->get('username'))
@@ -81,13 +68,10 @@ class PlayerController extends AbstractController
 
     }
 
-    #[Route('/delete/{id}', name:'delete')]
-    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/delete/{player}', name:'delete')]
+    public function delete(Player $player, EntityManagerInterface $entityManager): Response
     {
-        $player = $entityManager->getRepository(Player::class)->find($id);
-
         $entityManager->remove($player);
-
         $entityManager->flush();
 
         return $this->redirectTo("/player");
@@ -98,9 +82,7 @@ class PlayerController extends AbstractController
     public function addgame($id, Request $request): Response
     {
         if ($request->getMethod() == Request::METHOD_POST) {
-            /**
-             * @todo enregistrer l'objet
-             */
+
             return $this->redirectTo("/player");
         }
     }

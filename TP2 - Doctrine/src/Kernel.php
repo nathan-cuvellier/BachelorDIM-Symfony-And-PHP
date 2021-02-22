@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Controller\AbstractController;
+use App\Entity\Score;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\FilesystemCache;
 use Doctrine\ORM\EntityManager;
@@ -26,7 +27,7 @@ class Kernel
     private ?RouterInterface $router = null;
 
 
-    public function  __construct(
+    public function __construct(
         private bool $devIsEnabled = true,
         private bool $cacheIsEnabled = false
     )
@@ -89,7 +90,7 @@ class Kernel
         } catch (ResourceNotFoundException $notFoundException) {
             return new Response("Page Not Found", Response::HTTP_NOT_FOUND);
         }
-        list($className, $method) = explode("::", $parameters["_controller"]);
+        [$className, $method] = explode("::", $parameters["_controller"]);
         $resolvedArguments = $this->parametersResolver($className, $method, $parameters);
         $controller = new $className();
         if ($controller instanceof AbstractController) {
@@ -103,6 +104,7 @@ class Kernel
         //this code gives you the ability to see if a method should have a parameter
         //if so, set it as object or value.
         $reflexion = new \ReflectionMethod($className, $method);
+
         $params = $reflexion->getParameters();
         $autoInject = [
             Request::class => $this->request,
@@ -113,7 +115,14 @@ class Kernel
         foreach ($params as $param) {
             if ($param->hasType() && isset($autoInject[$param->getType()->getName()])) {
                 $paramValues[$param->getPosition()] = $autoInject[$param->getType()->getName()];
-            } else {
+            } elseif ($param->hasType() && str_starts_with($param->getType()->getName(), 'App\Entity\\')) {
+                $paramValues[$param->getPosition()] = $this->entityManager->getRepository($param->getType()->getName())->find($routerParameters[$param->getName()]);
+            } elseif($param->hasType() && str_starts_with($param->getType()->getName(), 'App\Repository\\')) {
+                $dataNamespace = explode('\\',$param->getType());
+                $repository = $dataNamespace[count($dataNamespace)-1];
+                $entity = str_replace('Repository', '', $repository);
+                $paramValues[$param->getPosition()] = $this->entityManager->getRepository("App\Entity\\$entity");
+            }else {
                 $paramValues[$param->getPosition()] = $routerParameters[$param->getName()] ?? null;
             }
         }
