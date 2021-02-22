@@ -30,7 +30,7 @@ class ScoreController extends AbstractController
             ->getRepository(Player::class)
             ->findAll();
 
-        return $this->render("score/index", ["scores" => $scores,
+        return $this->render("score/index.html.twig", ["scores" => $scores,
             "games" => $games, "players" => $players]);
     }
 

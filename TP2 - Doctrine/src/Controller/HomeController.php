@@ -15,7 +15,7 @@ class HomeController extends AbstractController
         $startDate = date("d/m", strtotime("-6 days", time()));
         $now = date('d/m');
 
-        return $this->render("home/index", [
+        return $this->render("home/index.html.twig", [
             "popularGamesOfWeek" => $entityManager->getRepository(Score::class)->getPopularGamesOfWeek(),
             "startDate" => $startDate,
             "now" => $now,
