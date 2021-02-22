@@ -5,13 +5,13 @@
     <h1 class="text-2xl block">#<?= $player->getId(); ?> <?= $player->getUsername(); ?></h1>
     <?= $player->getEmail() ?>
 
-    <a href="/player/show?id=<?= $player->getId(); ?>">
+    <a href="{{ path('player_show', {id: player.id }) }}">
         <i class="fas fa-eye"></i>
     </a>
-    <a href="/player/edit?id=<?= $player->getId(); ?>">
+    <a href="{{ path('player_edit', {id: player.id }) }}">
         <i class="fas fa-edit"></i>
     </a>
-    <a href="/player/delete?id=<?= $player->getId(); ?>"
+    <a href="{{ path('player_delete', {id: player.id }) }}"
        onclick="return confirm('Are you sure you want to delete it?')">
         <i class="fas fa-trash"></i>
     </a>
