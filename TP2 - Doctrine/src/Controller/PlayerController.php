@@ -11,18 +11,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Internal\Hydration\ArrayHydrator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/player', name:'player_')]
 class PlayerController extends AbstractController
 {
 
 
+    #[Route('', name:'index')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $players = $entityManager
             ->getRepository(Player::class)
             ->findAll();
-
-        //d($players);
 
         //$players = FakeData::players(25);
 
@@ -30,6 +31,7 @@ class PlayerController extends AbstractController
 
     }
 
+    #[Route('/add', name:'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         //$player = FakeData::players(1)[0];
@@ -49,6 +51,7 @@ class PlayerController extends AbstractController
     }
 
 
+    #[Route('/show/{id}', name:'show')]
     public function show(int $id, EntityManagerInterface $entityManager): Response
     {
         $player = $entityManager->getRepository(Player::class)
@@ -58,6 +61,7 @@ class PlayerController extends AbstractController
     }
 
 
+    #[Route('/edit/{id}', name:'edit')]
     public function edit($id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $player = $entityManager->getRepository(Player::class)
@@ -77,6 +81,7 @@ class PlayerController extends AbstractController
 
     }
 
+    #[Route('/delete/{id}', name:'delete')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
         $player = $entityManager->getRepository(Player::class)->find($id);
@@ -89,6 +94,7 @@ class PlayerController extends AbstractController
 
     }
 
+    #[Route('/addgame', name:'addgame')]
     public function addgame($id, Request $request): Response
     {
         if ($request->getMethod() == Request::METHOD_POST) {

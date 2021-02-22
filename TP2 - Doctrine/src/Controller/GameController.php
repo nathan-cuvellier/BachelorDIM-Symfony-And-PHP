@@ -5,14 +5,16 @@ namespace App\Controller;
 
 use App\Entity\Game;
 use App\Entity\Player;
-use App\FakeData;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
+#[Route('/game', name:'game_')]
 class GameController extends AbstractController
 {
 
+    #[Route('', name:'index')]
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         $games = $entityManager
@@ -22,6 +24,7 @@ class GameController extends AbstractController
 
     }
 
+    #[Route('/add', name:'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
 
@@ -46,6 +49,7 @@ class GameController extends AbstractController
     }
 
 
+    #[Route('/show/{id}', name:'show')]
     public function show(int $id, EntityManagerInterface $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->find($id);
@@ -54,6 +58,7 @@ class GameController extends AbstractController
     }
 
 
+    #[Route('/edit/{id}', name:'edit')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->find($id);
@@ -74,6 +79,7 @@ class GameController extends AbstractController
 
     }
 
+    #[Route('/delete/{id}', name:'delete')]
     public function delete(int $id, EntityManagerInterface $entityManager): Response
     {
         $game = $entityManager->getRepository(Game::class)->find($id);
